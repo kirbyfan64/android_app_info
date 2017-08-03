@@ -1,0 +1,14 @@
+name: android_app_info
+description: A new flutter plugin project.
+version: 0.0.1
+author: Ryan Gonzalez
+homepage: https://github.com/kirbyfan64/android_app_info
+
+flutter:
+  plugin:
+    androidPackage: com.refi64.androidappinfo
+    pluginClass: AndroidAppInfoPlugin
+
+dependencies:
+  flutter:
+    sdk: flutter
