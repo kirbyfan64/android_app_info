@@ -18,6 +18,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.app.Activity
+import android.util.Log
 
 import java.io.ByteArrayOutputStream
 
@@ -124,30 +125,35 @@ class AndroidAppInfoPlugin(activity: Activity): MethodCallHandler {
   }
 
   override fun onMethodCall(call: MethodCall, result: Result): Unit {
-    if (call.method.equals("platform-version")) {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else if (call.method.equals("get-data")) {
-      var name: String = call.argument("name")
-      var info = pm.getApplicationInfo(name, flags)
+    try {
+      if (call.method.equals("platform-version")) {
+        result.success("Android ${android.os.Build.VERSION.RELEASE}")
+      } else if (call.method.equals("get-data")) {
+        var name: String = call.argument("name")
+        var info = pm.getApplicationInfo(name, flags)
 
-      result.success(convertAppInfoToMap(info))
-    } else if (call.method.equals("get-apps")) {
-      var apps = pm.getInstalledApplications(flags)
-      result.success(apps.map { app -> convertAppInfoToMap(app) })
-    } else if (call.method.equals("get-activities")) {
-      var intent = Intent(Intent.ACTION_MAIN, null)
-      intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        result.success(convertAppInfoToMap(info))
+      } else if (call.method.equals("get-apps")) {
+        var apps = pm.getInstalledApplications(flags)
+        result.success(apps.map { app -> convertAppInfoToMap(app) })
+      } else if (call.method.equals("get-activities")) {
+        var intent = Intent(Intent.ACTION_MAIN, null)
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
 
-      var activities = pm.queryIntentActivities(intent, 0)
-      result.success(activities.map { ri -> convertResolveInfoToMap(ri) })
-    } else if (call.method.equals("start-app")) {
-      var name: String = call.argument("name")
+        var activities = pm.queryIntentActivities(intent, 0)
+        result.success(activities.map { ri -> convertResolveInfoToMap(ri) })
+      } else if (call.method.equals("start-app")) {
+        var name: String = call.argument("name")
 
-      var intent = pm.getLaunchIntentForPackage(name)
-      ctx.startActivity(intent)
-      result.success(null)
-    } else {
-      result.notImplemented()
+        var intent = pm.getLaunchIntentForPackage(name)
+        ctx.startActivity(intent)
+        result.success(null)
+      } else {
+        result.notImplemented()
+      }
+    } catch (tr: Throwable) {
+      Log.e("android_app_info", "fatal error in onMethodCall", tr)
+      result.error("UNKNOWN", "unknown error; see logcat for traceback", tr.toString())
     }
   }
 }
