@@ -15,7 +15,6 @@ class AndroidAppInfo {
     packageName = data['packageName'],
     className = data['className'],
     dataDir = data['dataDir'],
-    deviceProtectedDataDir = data['deviceProtectedDataDir'],
     label = data['label'],
 
     icon = data['icon'],
@@ -50,8 +49,7 @@ class AndroidAppInfo {
     return res;
   }
 
-  final String name, className, packageName, dataDir, deviceProtectedDataDir,
-               label;
+  final String name, className, packageName, dataDir, label;
   Uint8List icon, defaultIcon;
   bool hasLaunchIntent;
 }

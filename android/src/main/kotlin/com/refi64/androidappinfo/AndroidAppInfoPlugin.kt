@@ -106,7 +106,6 @@ class AndroidAppInfoPlugin(activity: Activity): MethodCallHandler {
     return combineMaps(convertPkgInfoToMap(info), mapOf(
       "className" to info.className as Object?,
       "dataDir" to info.dataDir as Object?,
-      "deviceProtectedDataDir" to info.deviceProtectedDataDir as Object?,
       "icon" to loadDrawableResource(res, info.icon),
       "label" to pm.getApplicationLabel(info) as Object?
     ))
@@ -118,7 +117,6 @@ class AndroidAppInfoPlugin(activity: Activity): MethodCallHandler {
     return combineMaps(convertPkgInfoToMap(info.activityInfo), mapOf(
       "className" to appinfo.className as Object?,
       "dataDir" to appinfo.dataDir as Object?,
-      "deviceProtectedDataDir" to appinfo.deviceProtectedDataDir as Object?,
       "icon" to loadDrawable(info.loadIcon(pm)),
       "label" to info.loadLabel(pm) as Object?
     ))
